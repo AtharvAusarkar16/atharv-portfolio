@@ -1,296 +1,282 @@
 /**
- * script.js — Enhanced Professional Portfolio
- * Features: particle network, typing animation, scroll spy, reveal effects, back‑to‑top.
+ * script.js — Atharv Ausarkar Portfolio
+ * Features: smooth scroll, active nav link, mobile menu, back-to-top,
+ *           safe fade-in, copy email, print styles.
  */
 
-(function() {
-    "use strict";
+(function () {
+  "use strict";
 
-    /* -------------------- CONFIG -------------------- */
+  /* -------------------- CONFIG -------------------- */
+  const CONFIG = {
+    headerHeight: 70,
+    activeClass: "active-link",
+    backToTopThreshold: 300,
+    fadeThreshold: 0.12
+  };
 
-    const CONFIG = {
-        headerHeight: 70,
-        activeClass: "active-link",
-        revealThreshold: 0.2,
-        particleCount: 80,
-        particleColor: "#3b82f6",
-        lineColor: "#2563eb",
-        typingSpeed: 70,
-        deleteSpeed: 40,
-        pauseAfterLine: 1500
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  /* -------------------- DOM -------------------- */
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const sections = document.querySelectorAll("section[id]");
+  const toggle = document.querySelector(".nav-toggle");
+  const navMenu = document.getElementById("navlinks");
+  const navRoot = document.querySelector(".navbar");
+
+  /* -------------------- UTILS -------------------- */
+  const getScrollY = () =>
+    window.pageYOffset || document.documentElement.scrollTop;
+
+  const debounce = (fn, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
     };
+  };
 
-    /* -------------------- DOM ELEMENTS -------------------- */
+  /* -------------------- SMOOTH SCROLL -------------------- */
+  function smoothScrollToElement(el) {
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + getScrollY() - CONFIG.headerHeight;
+    window.scrollTo({ top: y, behavior: prefersReducedMotion ? "auto" : "smooth" });
+  }
 
-    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-    const sections = document.querySelectorAll("section[id]");
-    const profileImg = document.querySelector(".profile-img");
-    const typingEl = document.querySelector(".typing");
-    const canvas = document.getElementById("particles");
+  navLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      const href = link.getAttribute("href");
+      if (href === "#" || href === "resume.pdf") return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      smoothScrollToElement(target);
+      history.pushState(null, "", href);
+      if (navMenu) navMenu.classList.remove("open");
+      if (toggle) toggle.setAttribute("aria-expanded", "false");
+    });
+  });
 
-    /* -------------------- UTILS -------------------- */
+  window.addEventListener("load", () => {
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) setTimeout(() => smoothScrollToElement(el), 100);
+    }
+  });
 
-    const getScrollY = () => window.pageYOffset || document.documentElement.scrollTop;
+  /* -------------------- ACTIVE NAV LINK -------------------- */
+  if (typeof window.IntersectionObserver === "function") {
+    const navObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach(l => l.classList.remove(CONFIG.activeClass));
+          const active = document.querySelector(
+            `.nav-links a[href="#${entry.target.id}"]`
+          );
+          if (active) active.classList.add(CONFIG.activeClass);
+        });
+      },
+      {
+        rootMargin: `-${CONFIG.headerHeight}px 0px -40% 0px`,
+        threshold: 0
+      }
+    );
+    sections.forEach(s => navObserver.observe(s));
+  }
 
-    const debounce = (fn, delay) => {
-        let timer;
-        return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn(...args), delay);
-        };
+  /* -------------------- MOBILE MENU -------------------- */
+  if (toggle && navMenu) {
+    toggle.addEventListener("click", () => {
+      const open = navMenu.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.addEventListener("click", e => {
+      if (!navMenu.classList.contains("open")) return;
+      if (navRoot && navRoot.contains(e.target)) return;
+      navMenu.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && navMenu.classList.contains("open")) {
+        navMenu.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  /* -------------------- SAFE FADE-IN ON SCROLL -------------------- */
+  if (!prefersReducedMotion && typeof window.IntersectionObserver === "function") {
+    const fadeTargets = document.querySelectorAll(
+      "section > .card, section > .project, section > .cert-card, section > .skill-groups > div, .achievements li"
+    );
+
+    fadeTargets.forEach(el => el.classList.add("fade-init"));
+
+    const fadeObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("fade-in");
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: CONFIG.fadeThreshold, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    fadeTargets.forEach(el => fadeObserver.observe(el));
+  }
+
+  /* -------------------- COPY EMAIL -------------------- */
+  (function setupCopyEmail() {
+    const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+    if (!emailLinks.length) return;
+
+    emailLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        const email = link.getAttribute("href").replace("mailto:", "").split("?")[0];
+        if (!navigator.clipboard || !email) return;
+
+        navigator.clipboard.writeText(email).then(() => {
+          showToast("Email copied: " + email);
+        }).catch(() => {});
+      });
+    });
+
+    function showToast(msg) {
+      const existing = document.getElementById("toast");
+      if (existing) existing.remove();
+
+      const toast = document.createElement("div");
+      toast.id = "toast";
+      toast.textContent = msg;
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #111827;
+        color: #fff;
+        padding: .65rem 1.1rem;
+        border-radius: 8px;
+        font-size: .9rem;
+        opacity: 0;
+        transition: opacity .2s ease, transform .2s ease;
+        z-index: 9999;
+        pointer-events: none;
+        max-width: 90vw;
+        text-align: center;
+      `;
+      document.body.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translateX(-50%) translateY(0)";
+      });
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(-50%) translateY(20px)";
+        setTimeout(() => toast.remove(), 250);
+      }, 2000);
+    }
+  })();
+
+  /* -------------------- BACK-TO-TOP -------------------- */
+  (function createBackToTop() {
+    const btn = document.createElement("button");
+    btn.innerHTML = "↑";
+    btn.setAttribute("aria-label", "Back to top");
+    btn.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .2s ease;
+      z-index: 99;
+    `;
+    btn.onmouseenter = () => (btn.style.transform = "translateY(-2px)");
+    btn.onmouseleave = () => (btn.style.transform = "translateY(0)");
+    btn.addEventListener("click", () =>
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
+    );
+    document.body.appendChild(btn);
+
+    const onScroll = () => {
+      const show = getScrollY() > CONFIG.backToTopThreshold;
+      btn.style.opacity = show ? "1" : "0";
+      btn.style.pointerEvents = show ? "auto" : "none";
     };
+    window.addEventListener("scroll", debounce(onScroll, 80), { passive: true });
+    onScroll();
+  })();
 
-    /* -------------------- SMOOTH SCROLL (with offset) -------------------- */
-
-    function smoothScrollToElement(element) {
-        if (!element) return;
-        const elementY = element.getBoundingClientRect().top + getScrollY();
-        window.scrollTo({
-            top: elementY - CONFIG.headerHeight,
-            behavior: "smooth"
-        });
-    }
-
-    navLinks.forEach(link => {
-        link.addEventListener("click", e => {
-            e.preventDefault();
-            const target = document.querySelector(link.getAttribute("href"));
-            smoothScrollToElement(target);
-            history.pushState(null, null, link.getAttribute("href"));
-        });
-    });
-
-    // Scroll to hash on load
-    window.addEventListener("load", () => {
-        if (window.location.hash) {
-            const el = document.querySelector(window.location.hash);
-            if (el) setTimeout(() => smoothScrollToElement(el), 100);
+  /* -------------------- PRINT STYLESHEET -------------------- */
+  (function injectPrintStyles() {
+    const css = `
+      @media print {
+        .navbar, .nav-toggle, .nav-links, footer .no-print,
+        button[aria-label="Back to top"], #toast {
+          display: none !important;
         }
-    });
-
-    /* -------------------- ACTIVE NAV LINK (IntersectionObserver) -------------------- */
-
-    const navObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                navLinks.forEach(l => l.classList.remove(CONFIG.activeClass));
-                const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-                if (active) active.classList.add(CONFIG.activeClass);
-            }
-        });
-    }, {
-        rootMargin: `-${CONFIG.headerHeight}px 0px -100px 0px`,
-        threshold: 0.3
-    });
-
-    sections.forEach(section => navObserver.observe(section));
-
-    /* -------------------- SECTION REVEAL (fade + slide) -------------------- */
-
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
-                obs.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: CONFIG.revealThreshold
-    });
-
-    document.querySelectorAll("section").forEach(sec => {
-        sec.style.opacity = "0";
-        sec.style.transform = "translateY(40px)";
-        sec.style.transition = "opacity 0.8s ease, transform 0.8s ease";
-        revealObserver.observe(sec);
-    });
-
-    /* -------------------- TYPING EFFECT (with delete) -------------------- */
-
-    if (typingEl) {
-        const roles = [
-            "AI & Machine Learning Engineer",
-            "Data Scientist",
-            "NLP Developer",
-            "Building Intelligent Systems"
-        ];
-
-        let roleIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function typeEffect() {
-            const currentRole = roles[roleIndex];
-            if (isDeleting) {
-                typingEl.textContent = currentRole.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typingEl.textContent = currentRole.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === currentRole.length) {
-                isDeleting = true;
-                setTimeout(typeEffect, CONFIG.pauseAfterLine);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                roleIndex = (roleIndex + 1) % roles.length;
-                setTimeout(typeEffect, 200);
-            } else {
-                setTimeout(typeEffect, isDeleting ? CONFIG.deleteSpeed : CONFIG.typingSpeed);
-            }
+        body {
+          background: #fff !important;
+          color: #000 !important;
+          font-size: 11pt;
+          line-height: 1.4;
         }
-
-        window.addEventListener("load", () => setTimeout(typeEffect, 500));
-    }
-
-    /* -------------------- PARTICLE BACKGROUND (with mouse interaction) -------------------- */
-
-    if (canvas) {
-        const ctx = canvas.getContext("2d");
-        let width, height;
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 120 };
-
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = 400; // fixed height, same as CSS
-            canvas.width = width;
-            canvas.height = height;
-            initParticles();
+        section {
+          padding: 0.5rem 0 !important;
+          max-width: 100% !important;
+          page-break-inside: avoid;
         }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < CONFIG.particleCount; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    dx: (Math.random() - 0.5) * 0.6,
-                    dy: (Math.random() - 0.5) * 0.6,
-                    size: Math.random() * 2 + 1.5
-                });
-            }
+        h1 { font-size: 20pt !important; }
+        h2 { font-size: 14pt !important; margin-bottom: .5rem !important; }
+        h3 { font-size: 11pt !important; }
+        a { color: #000 !important; text-decoration: underline; }
+        a[href^="http"]::after {
+          content: " (" attr(href) ")";
+          font-size: 9pt;
+          color: #555;
         }
-
-        function drawParticles() {
-            ctx.clearRect(0, 0, width, height);
-
-            // Update and draw particles
-            particles.forEach(p => {
-                p.x += p.dx;
-                p.y += p.dy;
-
-                // Bounce off edges
-                if (p.x < 0 || p.x > width) p.dx *= -1;
-                if (p.y < 0 || p.y > height) p.dy *= -1;
-
-                // Mouse repulsion
-                if (mouse.x && mouse.y) {
-                    const dx = mouse.x - p.x;
-                    const dy = mouse.y - p.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < mouse.radius) {
-                        const force = (mouse.radius - dist) / mouse.radius;
-                        const angle = Math.atan2(dy, dx);
-                        p.x -= Math.cos(angle) * force * 1.5;
-                        p.y -= Math.sin(angle) * force * 1.5;
-                    }
-                }
-
-                // Keep inside bounds
-                p.x = Math.min(width, Math.max(0, p.x));
-                p.y = Math.min(height, Math.max(0, p.y));
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = CONFIG.particleColor;
-                ctx.globalAlpha = 0.6;
-                ctx.fill();
-            });
-
-            // Draw connections
-            ctx.strokeStyle = CONFIG.lineColor;
-            ctx.lineWidth = 0.8;
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.globalAlpha = 0.15 * (1 - dist / 100);
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            requestAnimationFrame(drawParticles);
+        .card, .project, .cert-card {
+          border: 1px solid #ccc !important;
+          box-shadow: none !important;
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
+        .skill-groups { grid-template-columns: repeat(3, 1fr) !important; }
+        .skill-groups li {
+          background: #f0f0f0 !important;
+          border: 1px solid #ddd;
+        }
+        .hero-cta .btn { display: none !important; }
+        .hero-cta a[href="resume.pdf"] { display: none !important; }
+        .fade-init { opacity: 1 !important; transform: none !important; }
+      }
+    `;
+    const style = document.createElement("style");
+    style.textContent = css;
+    document.head.appendChild(style);
+  })();
 
-        // Mouse tracking
-        canvas.addEventListener("mousemove", e => {
-            const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        });
-        canvas.addEventListener("mouseleave", () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        window.addEventListener("resize", debounce(resizeCanvas, 100));
-        resizeCanvas();
-        drawParticles();
-    }
-
-    /* -------------------- BACK-TO-TOP BUTTON (injected) -------------------- */
-
-    (function createBackToTop() {
-        const btn = document.createElement("button");
-        btn.innerHTML = "↑";
-        btn.setAttribute("aria-label", "Back to top");
-        btn.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #1d4ed8;
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.2s;
-            z-index: 99;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
-        btn.onmouseover = () => (btn.style.transform = "scale(1.1)");
-        btn.onmouseout = () => (btn.style.transform = "scale(1)");
-        document.body.appendChild(btn);
-
-        window.addEventListener("scroll", () => {
-            btn.style.opacity = getScrollY() > 300 ? "1" : "0";
-        });
-
-        btn.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    })();
-
-    /* -------------------- PROFILE IMAGE LOAD EFFECT -------------------- */
-
-    if (profileImg) {
-        profileImg.style.transform = "scale(1)";
-        // If image fails, fallback already handled in HTML
-    }
+  /* -------------------- YEAR IN FOOTER -------------------- */
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 })();
