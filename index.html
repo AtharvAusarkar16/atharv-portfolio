@@ -1,709 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="VosvZfupBKw584tuVWJtYlnVtJEmrrd7UdiPxMmtbng" />
-  <title>Atharv Ausarkar · AI & ML Engineer</title>
-  <meta name="description" content="Atharv Ausarkar – AI & Machine Learning Developer from Mumbai. Enhanced portfolio with interactive particles, skills, and modern design.">
-  <meta name="author" content="Atharv Ausarkar">
-
-  <!-- Google Fonts + Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-  <style>
-    /* ----- CSS VARIABLES (modern light theme) ----- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f4f8ff;
-      color: #0a1a2f;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-    }
-
-    /* gradient & glassmorphism utilities */
-    .glass {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 12px 30px rgba(0, 20, 50, 0.1);
-    }
-
-    /* ----- NAVBAR (sticky, glass) ----- */
-    .navbar {
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 5%;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-      z-index: 100;
-      border-bottom: 1px solid rgba(0, 70, 150, 0.1);
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links a {
-      margin-left: 2rem;
-      text-decoration: none;
-      font-weight: 500;
-      color: #1e2b45;
-      transition: 0.2s;
-      border-bottom: 2px solid transparent;
-      padding-bottom: 4px;
-    }
-
-    .nav-links a:hover {
-      color: #1d4ed8;
-      border-bottom-color: #1d4ed8;
-    }
-
-    /* ----- HERO SECTION (with canvas particles) ----- */
-    .hero {
-      position: relative;
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 2rem;
-      padding: 2rem 5%;
-      overflow: hidden;
-    }
-
-    #particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none; /* allow clicking through */
-    }
-
-    .hero-content {
-      flex: 1 1 400px;
-      z-index: 2;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 700;
-      background: linear-gradient(to right, #0f2b5e, #2563eb);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1.2;
-    }
-
-    .typing-container {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #334155;
-      margin: 1rem 0 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .static-text {
-      color: #1e293b;
-    }
-
-    .dynamic-text {
-      color: #7c3aed;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 3px;
-      height: 1.8rem;
-      background-color: #2563eb;
-      margin-left: 5px;
-      animation: blink 0.8s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      color: #2d3a5e;
-      max-width: 600px;
-      margin-bottom: 2rem;
-    }
-
-    .profile-img {
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 30px 40px -15px rgba(0, 45, 80, 0.3);
-      border: 4px solid white;
-      transition: transform 0.4s ease;
-      z-index: 2;
-      background: #e0e8ff; /* fallback if image missing */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      color: #1e3c72;
-    }
-
-    .profile-img:hover {
-      transform: scale(1.02);
-    }
-
-    /* ----- SECTIONS (common) ----- */
-    section {
-      padding: 5rem 5%;
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      background: linear-gradient(135deg, #0b2b4e, #1d4ed8);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-      border-bottom: 3px solid #2563eb50;
-      padding-bottom: 0.5rem;
-    }
-
-    /* about card */
-    .about-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 32px;
-      box-shadow: 0 20px 35px -8px rgba(0, 35, 70, 0.1);
-      font-size: 1.2rem;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-
-    /* skills chips */
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 2rem;
-    }
-
-    .skill-tag {
-      background: white;
-      padding: 0.6rem 1.4rem;
-      border-radius: 40px;
-      font-weight: 500;
-      box-shadow: 0 4px 8px rgba(0, 35, 70, 0.05);
-      border: 1px solid #e2e8f0;
-      transition: all 0.2s;
-      color: #1e293b;
-    }
-
-    .skill-tag:hover {
-      background: #1d4ed8;
-      color: white;
-      border-color: #1d4ed8;
-      transform: translateY(-3px);
-    }
-
-    /* project cards (grid) */
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 28px;
-      padding: 1.8rem;
-      box-shadow: 0 15px 30px -12px rgba(0, 35, 80, 0.15);
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card:hover {
-      transform: translateY(-12px);
-      box-shadow: 0 30px 45px -15px #1d4ed855;
-    }
-
-    .card h3 {
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: #0b2b4e;
-      margin-bottom: 0.75rem;
-    }
-
-    .card p {
-      color: #334155;
-      margin-bottom: 1.2rem;
-      flex: 1;
-    }
-
-    .tech-badge {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 1rem 0;
-    }
-
-    .tech-badge span {
-      background: #eef2ff;
-      color: #1d4ed8;
-      font-size: 0.8rem;
-      padding: 0.3rem 1rem;
-      border-radius: 20px;
-      font-weight: 500;
-    }
-
-    .card-link {
-      text-decoration: none;
-      font-weight: 600;
-      color: #1d4ed8;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: auto;
-    }
-
-    /* contact area */
-    .contact-flex {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3rem;
-      background: white;
-      border-radius: 40px;
-      padding: 2.5rem;
-      box-shadow: 0 25px 40px -20px rgba(0,0,0,0.15);
-    }
-
-    .contact-info {
-      flex: 1 1 250px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      margin: 2rem 0;
-      font-size: 1.2rem;
-    }
-
-    .contact-item i {
-      width: 40px;
-      height: 40px;
-      background: #eef2ff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #1d4ed8;
-      font-size: 1.3rem;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .social-links a {
-      color: #1e293b;
-      font-size: 1.8rem;
-      transition: 0.2s;
-    }
-
-    .social-links a:hover {
-      color: #1d4ed8;
-      transform: scale(1.1);
-    }
-
-    /* simple footer */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: white;
-      border-top: 1px solid #e9eef3;
-      color: #4b5563;
-    }
-
-    /* responsiveness */
-    @media (max-width: 700px) {
-      .navbar {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      .nav-links a {
-        margin: 0 1rem;
-      }
-      .hero {
-        justify-content: center;
-        text-align: center;
-      }
-      .hero p {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .typing-container {
-        justify-content: center;
-      }
-    }
-
-    /* placeholder for profile image if missing */
-    .profile-img[alt="Atharv Ausarkar"]:not([src]) {
-      background: linear-gradient(145deg, #3b82f6, #7c3aed);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atharv Ausarkar · Data Analyst & ML Enthusiast</title>
+<meta name="description" content="Atharv Ausarkar — Final-year Computer Engineering student from Mumbai. Data Analyst and Machine Learning enthusiast skilled in Python, SQL, and Power BI.">
+<meta name="author" content="Atharv Ausarkar">
+<meta property="og:title" content="Atharv Ausarkar · Data Analyst & ML Enthusiast">
+<meta property="og:description" content="Portfolio of Atharv Ausarkar — Data Analysis, Machine Learning, and Power BI projects.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav class="navbar">
-  <span class="logo">Atharv.</span>
-  <div class="nav-links">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
+  <a href="#home" class="logo">Atharv Ausarkar</a>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <div class="nav-links" id="navlinks">
     <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
     <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#achievements">Achievements</a>
     <a href="#contact">Contact</a>
+    <a href="resume.pdf" class="btn primary small" download>Résumé</a>
   </div>
 </nav>
 
-<!-- HERO with enhanced particles -->
-<section id="home">
-  <div class="hero">
-    <canvas id="particles"></canvas>
-    <div class="hero-content">
-      <h1>Atharv Ausarkar</h1>
-      <div class="typing-container">
-        <span class="static-text">I'm a</span>
-        <span class="dynamic-text" id="typing-text"></span>
-        <span class="cursor"></span>
-      </div>
-      <p>
-        Building production-ready AI & ML systems. Passionate about deep learning, NLP, and real-world data solutions.
-      </p>
-      <!-- subtle call to action -->
-      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-        <a href="#projects" style="background:#1d4ed8; color:white; padding:0.8rem 2rem; border-radius:40px; text-decoration:none; font-weight:600;">View work <i class="fa-solid fa-arrow-right" style="margin-left:8px;"></i></a>
-        <a href="#contact" style="background:#e9effa; color:#1d4ed8; padding:0.8rem 2rem; border-radius:40px; text-decoration:none; font-weight:600;">Contact me</a>
-      </div>
-    </div>
+<main>
 
-    <!-- profile image with fallback (if atharv.jpg missing, show initials) -->
-    <img src="atharv.jpg" alt="Atharv Ausarkar" class="profile-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'280\' height=\'280\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%233b82f6\'/><text x=\'50\' y=\'70\' font-size=\'40\' text-anchor=\'middle\' fill=\'white\' font-family=\'Inter\' dominant-baseline=\'middle\'>AA</text></svg>';">
+<section id="home" class="hero">
+  <div class="hero-content">
+    <h1>Atharv Ausarkar</h1>
+    <p class="role">Data Analyst &amp; Machine Learning Enthusiast</p>
+    <p class="location">Final-year Computer Engineering student · Mumbai, India</p>
+    <p class="value">I turn raw data into clear insights using Python, SQL, and Power BI.</p>
+    <div class="hero-cta">
+      <a href="resume.pdf" class="btn primary" download>Download Résumé</a>
+      <a href="https://github.com/AtharvAusarkar16" class="btn ghost" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/atharvausarkar" class="btn ghost" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:atharvausarkar@gmail.com" class="btn ghost">Email</a>
+    </div>
   </div>
+  <img class="hero-photo" src="atharv.jpg" alt="Atharv Ausarkar">
 </section>
 
-<!-- ABOUT section with modern card -->
 <section id="about">
-  <h2 class="section-title">About me</h2>
-  <div class="about-card">
-    <p>👋 I'm Atharv, a Computer Engineering student from Mumbai with a deep focus on Artificial Intelligence and Machine Learning. I love transforming raw data into intelligent applications that solve real-world challenges — from healthcare IoT to career guidance systems.</p>
-    <p style="margin-top: 1rem;">💡 I'm driven by the idea of making AI accessible and impactful. Currently exploring advanced NLP and MLOps to bring models from research to production.</p>
+  <h2>About</h2>
+  <div class="card">
+    <p>Final-year Computer Engineering student based in Mumbai. I work on data analysis and applied machine learning projects — from cleaning real datasets to building dashboards and small ML models. I've won 1st Rank at a PAN India data science hackathon and placed 3rd at a Mumbai University hackathon.</p>
+  </div>
+  <div class="card">
+    <h3>Objective</h3>
+    <p>Seeking a Data Analyst or Machine Learning internship where I can apply Python, SQL, and Power BI to real business problems and continue growing as an analyst.</p>
+  </div>
+  <div class="card">
+    <h3>Strengths</h3>
+    <ul style="padding-left:1.2rem;margin-top:.5rem">
+      <li>Strong Python + SQL foundation for data work</li>
+      <li>Dashboard-first mindset (Power BI, Tableau)</li>
+      <li>Hackathon-tested under time pressure</li>
+      <li>Clear documentation of every project</li>
+      <li>Comfortable presenting technical work</li>
+    </ul>
   </div>
 </section>
 
-<!-- SKILLS section (new) -->
 <section id="skills">
-  <h2 class="section-title">Technical toolkit</h2>
-  <div class="skills-grid">
-    <span class="skill-tag">Python</span>
-    <span class="skill-tag">TensorFlow</span>
-    <span class="skill-tag">PyTorch</span>
-    <span class="skill-tag">Scikit-learn</span>
-    <span class="skill-tag">NLP (spaCy, NLTK)</span>
-    <span class="skill-tag">Computer Vision</span>
-    <span class="skill-tag">Pandas / NumPy</span>
-    <span class="skill-tag">Flask / FastAPI</span>
-    <span class="skill-tag">SQL</span>
-    <span class="skill-tag">Docker</span>
-    <span class="skill-tag">AWS (SageMaker)</span>
-    <span class="skill-tag">Git & CI/CD</span>
+  <h2>Skills</h2>
+  <div class="skill-groups">
+    <div><h3>Programming</h3><ul><li>Python</li><li>SQL</li><li>Pandas</li><li>NumPy</li></ul></div>
+    <div><h3>Data Analysis</h3><ul><li>EDA</li><li>Data Cleaning</li><li>Statistics</li><li>Excel</li></ul></div>
+    <div><h3>Machine Learning</h3><ul><li>Scikit-learn</li><li>Regression</li><li>Classification</li><li>Model Evaluation</li></ul></div>
+    <div><h3>Visualization</h3><ul><li>Power BI</li><li>Tableau</li><li>Matplotlib</li><li>Seaborn</li></ul></div>
+    <div><h3>Databases</h3><ul><li>MySQL</li><li>SQLite</li></ul></div>
+    <div><h3>Currently Learning</h3><ul><li>Docker (basics)</li><li>Streamlit</li><li>FastAPI</li></ul></div>
   </div>
 </section>
 
-<!-- PROJECTS enhanced with tech badges & links -->
+<section id="education">
+  <h2>Education</h2>
+  <ol class="timeline">
+    <li>
+      <div class="period">2022 – 2026</div>
+      <h3>BE Computer Engineering</h3>
+      <div class="inst">Mumbai University · Pursuing</div>
+    </li>
+    <li>
+      <div class="period">2019 – 2022</div>
+      <h3>Diploma in Computer Engineering</h3>
+      <div class="inst">Score: 76.69%</div>
+    </li>
+    <li>
+      <div class="period">2019</div>
+      <h3>SSC (Class X)</h3>
+      <div class="inst">Score: 78%</div>
+    </li>
+  </ol>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="card">
+    <h3>Data Science &amp; Analytics Intern</h3>
+    <p class="muted">Imarticus Learning · Feb 2025 – Mar 2025 · Thane, Mumbai</p>
+    <ul style="padding-left:1.2rem;margin-top:.5rem">
+      <li>Completed hands-on training in data analysis, Python, and analytics tools</li>
+      <li>Awarded Gold Medal for active participation and performance</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Web Development Intern</h3>
+    <p class="muted">XMEGA · Jun 2024 – Jul 2024 · Nashik</p>
+    <ul style="padding-left:1.2rem;margin-top:.5rem">
+      <li>Worked on front-end web development tasks</li>
+      <li>Completed MSME-registered internship program</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Industrial Training — VI Week</h3>
+    <p class="muted">Sumago Infotech Pvt. Ltd. · Jul 2022 – Aug 2022</p>
+    <ul style="padding-left:1.2rem;margin-top:.5rem">
+      <li>Six-week industry training covering software development fundamentals</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Academic Projects &amp; Hackathons</h3>
+    <p class="muted">2022 – Present</p>
+    <ul style="padding-left:1.2rem;margin-top:.5rem">
+      <li>Built 6+ end-to-end data and ML projects (Python, SQL, Power BI)</li>
+      <li>Won 1st Rank at Imarticus Data Science Hackathon (PAN India)</li>
+      <li>Rank 3 at Mumbai University Hackathon</li>
+      <li>Organized a Mumbai University-level college hackathon</li>
+    </ul>
+  </div>
+</section>
+
 <section id="projects">
-  <h2 class="section-title">Featured projects</h2>
-  <div class="project-grid">
-    
-    <div class="card">
-      <h3>Smart Career Recommendation</h3>
-      <p>ML model that predicts suitable career paths based on skills, personality, and market trends. Achieved 87% accuracy using ensemble methods.</p>
-      <div class="tech-badge">
-        <span>Python</span><span>XGBoost</span><span>Flask</span><span>Pandas</span>
-      </div>
-      <a href="#" class="card-link">Live demo <i class="fa-solid fa-arrow-up-right-from-s"></i></a>
-    </div>
+  <h2>Projects</h2>
 
-    <div class="card">
-      <h3>IV Bag Monitoring System</h3>
-      <p>IoT + AI solution for real-time fluid level detection in hospitals. Uses computer vision to alert staff, reducing manual checks by 70%.</p>
-      <div class="tech-badge">
-        <span>YOLOv5</span><span>RPi</span><span>MQTT</span><span>React</span>
-      </div>
-      <a href="#" class="card-link">Case study <i class="fa-solid fa-arrow-up-right-from-s"></i></a>
-    </div>
+  <article class="project">
+    <h3>MedPredict — Disease Prediction using ML</h3>
+    <dl>
+      <dt>Problem</dt><dd>Early disease risk prediction from patient symptom data is slow and inconsistent.</dd>
+      <dt>Method</dt><dd>Built a classification pipeline in Python. Trained multiple models on a public medical dataset and compared accuracy, precision, and recall using cross-validation.</dd>
+      <dt>Tools</dt><dd>Python, Pandas, Scikit-learn, Matplotlib</dd>
+      <dt>Result</dt><dd>Identified the best-performing classifier for the dataset; documented model evaluation and feature importance.</dd>
+    </dl>
+    <p class="links"><a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">GitHub →</a></p>
+  </article>
 
-    <div class="card">
-      <h3>Legal Document Summarizer</h3>
-      <p>NLP pipeline using transformers to summarize lengthy legal contracts, saving 90% of reading time. Fine-tuned on Indian legal corpus.</p>
-      <div class="tech-badge">
-        <span>HuggingFace</span><span>BERT</span><span>FastAPI</span><span>Docker</span>
-      </div>
-      <!-- update the URL to your actual GitHub repo or profile -->
-      <a href="https://github.com/atharv-username" class="card-link" target="_blank" rel="noopener">GitHub <i class="fa-brands fa-github"></i></a>
+  <article class="project">
+    <h3>Fraud Detection System</h3>
+    <dl>
+      <dt>Problem</dt><dd>Credit card fraud datasets are heavily imbalanced, which breaks naive classifiers.</dd>
+      <dt>Method</dt><dd>Handled class imbalance with resampling, trained classification models, and evaluated with precision-recall rather than raw accuracy.</dd>
+      <dt>Tools</dt><dd>Python, Pandas, Scikit-learn, Seaborn</dd>
+      <dt>Result</dt><dd>Compared models on precision, recall, and F1; documented trade-offs between false positives and false negatives.</dd>
+    </dl>
+    <p class="links"><a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">GitHub →</a></p>
+  </article>
+
+  <article class="project">
+    <h3>Agriculture Analysis — Crops &amp; Yields</h3>
+    <dl>
+      <dt>Problem</dt><dd>Crop yield data is scattered across years and regions, making trends hard to see.</dd>
+      <dt>Method</dt><dd>Cleaned and merged multi-year crop datasets, ran EDA, and visualized yield trends by crop, season, and state.</dd>
+      <dt>Tools</dt><dd>Python, Pandas, Matplotlib, Seaborn</dd>
+      <dt>Result</dt><dd>Identified top-performing crops and seasonal patterns; produced charts usable for agricultural planning.</dd>
+    </dl>
+    <p class="links"><a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">GitHub →</a></p>
+  </article>
+
+  <article class="project">
+    <h3>Smart Career Recommendation System</h3>
+    <dl>
+      <dt>Problem</dt><dd>Students struggle to match their skills and interests to realistic career paths.</dd>
+      <dt>Method</dt><dd>Built a small ML recommender with Scikit-learn using aptitude and interest features; compared Decision Tree, Random Forest, and KNN.</dd>
+      <dt>Tools</dt><dd>Python, Pandas, Scikit-learn</dd>
+      <dt>Result</dt><dd>Random Forest performed best in testing; feature importance used to explain recommendations.</dd>
+    </dl>
+    <p class="links"><a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">GitHub →</a></p>
+  </article>
+
+  <article class="project">
+    <h3>Data Analysis Portfolio (Notebooks)</h3>
+    <dl>
+      <dt>Problem</dt><dd>A working collection of analysis notebooks covering cleaning, EDA, and visualization on public datasets.</dd>
+      <dt>Method</dt><dd>Documented each notebook with question → data → method → findings.</dd>
+      <dt>Tools</dt><dd>Python, Pandas, NumPy, Matplotlib, Seaborn</dd>
+      <dt>Result</dt><dd>A growing public notebook set demonstrating end-to-end analysis workflow.</dd>
+    </dl>
+    <p class="links"><a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">GitHub →</a></p>
+  </article>
+</section>
+
+<section id="certifications">
+  <h2>Certifications &amp; Internships</h2>
+  <div class="cert-grid">
+    <div class="cert-card">
+      <h3>Data Science &amp; Analytics Internship</h3>
+      <p class="muted">Imarticus Learning · Feb – Mar 2025</p>
+      <p>One-month internship covering data analysis workflows, Python for data, and analytics fundamentals.</p>
+    </div>
+    <div class="cert-card">
+      <h3>Web Development Internship</h3>
+      <p class="muted">XMEGA, Nashik (MSME) · Jun – Jul 2024</p>
+      <p>One-month internship building web pages and working on front-end tasks.</p>
+    </div>
+    <div class="cert-card">
+      <h3>Industrial Training — VI Week</h3>
+      <p class="muted">Sumago Infotech Pvt. Ltd. · Jul – Aug 2022</p>
+      <p>Industry training during diploma covering software development fundamentals.</p>
+    </div>
+    <div class="cert-card">
+      <h3>Introduction to Programming — Grade A1</h3>
+      <p class="muted">Anudip Foundation · Mar 2025 · 120 Hours</p>
+      <p>Completed 120-hour programming course with top grade (A1).</p>
+    </div>
+    <div class="cert-card">
+      <h3>Recent Advancements in Machine Learning</h3>
+      <p class="muted">ISTE · YTIET · Feb 2025</p>
+      <p>One-week hands-on training on modern ML techniques. ISTE-approved, AICTE-recognized.</p>
+    </div>
+    <div class="cert-card">
+      <h3>Python Data Science Workshop</h3>
+      <p class="muted">FirstBit Solutions · Jan 2025</p>
+      <p>Workshop covering Python data science fundamentals.</p>
     </div>
   </div>
 </section>
 
-<!-- CONTACT with icons and formless but rich -->
+<section id="achievements">
+  <h2>Achievements</h2>
+  <ul class="achievements">
+    <li><span class="badge">01</span><div><strong>1st Rank — Imarticus Learning Data Science Hackathon</strong><br><span class="muted">PAN India level</span></div></li>
+    <li><span class="badge">02</span><div><strong>Gold Medal — Imarticus Learning Data Science Internship</strong></div></li>
+    <li><span class="badge">03</span><div><strong>Rank 3 — Mumbai University Hackathon</strong></div></li>
+    <li><span class="badge">04</span><div><strong>Organizer — Mumbai University-level college hackathon</strong></div></li>
+    <li><span class="badge">05</span><div><strong>Participant — TECHSAGAR 2025 State-level Project Competition</strong></div></li>
+    <li><span class="badge">06</span><div><strong>Participant — Multiple state and national hackathons</strong></div></li>
+  </ul>
+</section>
+
 <section id="contact">
-  <h2 class="section-title">Let's connect</h2>
-  <div class="contact-flex">
-    <div class="contact-info">
-      <div class="contact-item">
-        <i class="fa-regular fa-envelope"></i>
-        <span>atharv.ausarkar@example.com</span>
-      </div>
-      <div class="contact-item">
-        <i class="fa-regular fa-map"></i>
-        <span>Mumbai, India</span>
-      </div>
-      <div class="contact-item">
-        <i class="fa-regular fa-clock"></i>
-        <span>Available for freelance / collab</span>
-      </div>
-      <div class="social-links">
-        <a href="https://github.com/atharv-username" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/atharv-username" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="#"><i class="fa-brands fa-kaggle"></i></a>
-      </div>
-    </div>
-    <div style="flex: 1 1 250px; background: #f0f6ff; border-radius: 32px; padding: 2rem; text-align: center;">
-      <i class="fa-regular fa-message" style="font-size: 3rem; color: #1d4ed8; margin-bottom: 1rem;"></i>
-      <h3>Let's build something AI-powered</h3>
-      <p style="margin: 1rem 0;">I'm open to research collaborations and ML engineering roles.</p>
-      <a href="mailto:atharv.ausarkar@example.com" style="display:inline-block; background:#1d4ed8; color:white; padding:0.7rem 2rem; border-radius:40px; text-decoration:none;">Say hello</a>
-    </div>
+  <h2>Contact</h2>
+  <div class="contact-grid">
+    <a href="mailto:atharvausarkar@gmail.com">
+      <span class="label">Email</span>atharvausarkar@gmail.com
+    </a>
+    <a href="https://github.com/AtharvAusarkar16" target="_blank" rel="noopener">
+      <span class="label">GitHub</span>github.com/AtharvAusarkar16
+    </a>
+    <a href="https://www.linkedin.com/in/atharvausarkar" target="_blank" rel="noopener">
+      <span class="label">LinkedIn</span>linkedin.com/in/atharvausarkar
+    </a>
+    <a href="resume.pdf" download>
+      <span class="label">Résumé</span>Download PDF
+    </a>
   </div>
 </section>
+
+</main>
 
 <footer>
-  <p>© <span id="year"></span> Atharv Ausarkar — AI & ML Engineer. All rights reserved.</p>
-  <p style="margin-top: 0.5rem; font-size: 0.9rem;">Crafted with <i class="fa-regular fa-heart" style="color:#1d4ed8;"></i> in Mumbai</p>
+  © <span id="year"></span> Atharv Ausarkar · Mumbai, India
 </footer>
 
-<!-- ========= ENHANCED JAVASCRIPT ========= -->
-<script>
-  (function() {
-    // ---------- Smooth scroll (native but with offset for fixed navbar) ----------
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          const navbarHeight = document.querySelector('.navbar').offsetHeight;
-          const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({
-            top: elementPosition - navbarHeight - 10,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-
-    // ---------- Dynamic year ----------
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // ---------- TYPING EFFECT (enhanced with infinite loop) ----------
-    const roles = [
-      "AI & Machine Learning Engineer",
-      "Data Science Enthusiast",
-      "NLP Developer",
-      "Building Intelligent Systems"
-    ];
-    let roleIndex = 0;
-    let charIndex = 0;
-    const typingElement = document.getElementById('typing-text');
-    const cursor = document.querySelector('.cursor');
-
-    function typeNext() {
-      if (roleIndex >= roles.length) roleIndex = 0;
-      const currentRole = roles[roleIndex];
-      if (charIndex < currentRole.length) {
-        typingElement.textContent = currentRole.substring(0, charIndex + 1);
-        charIndex++;
-        setTimeout(typeNext, 70);
-      } else {
-        // pause, then delete
-        setTimeout(erase, 1500);
-      }
-    }
-
-    function erase() {
-      const currentRole = roles[roleIndex];
-      if (charIndex > 0) {
-        typingElement.textContent = currentRole.substring(0, charIndex - 1);
-        charIndex--;
-        setTimeout(erase, 40);
-      } else {
-        roleIndex++;
-        setTimeout(typeNext, 200);
-      }
-    }
-
-    typeNext(); // start
-
-    // ---------- INTERACTIVE PARTICLES (canvas) with connection lines + mouse effect ----------
-    const canvas = document.getElementById('particles');
-    let ctx = canvas.getContext('2d');
-    let width, height;
-    let particles = [];
-    let mouse = { x: null, y: null, radius: 100 };
-
-    function initParticles() {
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
-
-      particles = [];
-      const particleCount = Math.min(80, Math.floor(width * height / 7000));
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          dx: (Math.random() - 0.5) * 0.6,
-          dy: (Math.random() - 0.5) * 0.6,
-          radius: Math.random() * 2 + 1.5,
-        });
-      }
-    }
-
-    function drawParticles() {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, width, height);
-      
-      // update positions
-      particles.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        // bounce off edges
-        if (p.x < 0 || p.x > width) p.dx *= -1;
-        if (p.y < 0 || p.y > height) p.dy *= -1;
-
-        // mouse repulsion (gentle)
-        if (mouse.x && mouse.y) {
-          let dx = mouse.x - p.x;
-          let dy = mouse.y - p.y;
-          let dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < mouse.radius) {
-            let force = (mouse.radius - dist) / mouse.radius;
-            let angle = Math.atan2(dy, dx);
-            p.x -= Math.cos(angle) * force * 1.2;
-            p.y -= Math.sin(angle) * force * 1.2;
-          }
-        }
-
-        // keep inside
-        p.x = Math.min(width, Math.max(0, p.x));
-        p.y = Math.min(height, Math.max(0, p.y));
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = '#3b82f6';
-        ctx.globalAlpha = 0.6;
-        ctx.fill();
-      });
-
-      // draw lines between close particles
-      ctx.strokeStyle = '#3b82f6';
-      ctx.globalAlpha = 0.15;
-      ctx.lineWidth = 0.8;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = '#2563eb';
-            ctx.globalAlpha = 0.2 * (1 - dist / 100);
-            ctx.stroke();
-          }
-        }
-      }
-
-      requestAnimationFrame(drawParticles);
-    }
-
-    // resize handler
-    window.addEventListener('resize', () => {
-      initParticles();
-    });
-
-    // mouse move
-    window.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    });
-
-    canvas.addEventListener('mouseleave', () => {
-      mouse.x = null; mouse.y = null;
-    });
-
-    // start particles
-    initParticles();
-    drawParticles();
-  })();
-</script>
+<script src="script.js" defer></script>
 </body>
-
 </html>
